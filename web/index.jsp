@@ -14,10 +14,13 @@
     <body>
         <h1>Добро пожаловать в нашу библиотеку!</h1>
         <p>${info}</p>
-        <p><a href="newBook">Добавть книгу</a></p>
-        <p><a href="newAuthor">Добавть автора</a></p>
+        <p><a href="newBook">Добавить книгу</a></p>
+        <p><a href="newAuthor">Добавить автора</a></p>
         <p><a href="listBooks">Список книг</a></p>
-        <p><a href="newReader">Добавть читателя</a></p>
+        <p><a href="newReader">Добавить читателя</a></p>
         <p><a href="listReaders">Список читателей</a></p>
+        <p><a href="takeOnBook">Выдать книгу</a></p>
+        <p><a href="listTakedBooks">Список выданных книг</a></p>
+        
     </body>
 </html>
