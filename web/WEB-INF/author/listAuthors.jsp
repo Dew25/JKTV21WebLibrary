@@ -10,14 +10,14 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Список читателей</title>
+        <title>Список авторов</title>
     </head>
     <body>
-        <h1>Список читателей</h1>
+        <h1>Список авторов</h1>
         <ol>
-            <c:forEach var="reader" items="${listReaders}">
+            <c:forEach var="author" items="${listAuthors}">
                 <li>
-                    ${reader.firstname} ${reader.lastname}. Телефон: ${reader.phone}
+                    ${author.firstname} ${author.lastname}. ${author.strBirthday}
                 </li>
             </c:forEach>
         </ol>

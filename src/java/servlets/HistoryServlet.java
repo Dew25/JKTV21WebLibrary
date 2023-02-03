@@ -29,7 +29,9 @@ import session.ReaderFacade;
 @WebServlet(name = "HistoryServlet", urlPatterns = {
     "/takeOnBook",
     "/createHistory",
-    "/listTakedBooks"
+    "/listTakedBooks",
+    "/formReturnBook",
+    "/returnBook",
 })
 public class HistoryServlet extends HttpServlet {
     @EJB private BookFacade bookFacade;
@@ -45,7 +47,7 @@ public class HistoryServlet extends HttpServlet {
             case "/takeOnBook":
                 request.setAttribute("listReaders", readerFacade.findAll());
                 request.setAttribute("listBooks", bookFacade.findAll());
-                request.getRequestDispatcher("/WEB-INF/takeOnBook.jsp").forward(request, response);
+                request.getRequestDispatcher("/WEB-INF/history/takeOnBook.jsp").forward(request, response);
                 break;
             case "/createHistory":
                 String readerId = request.getParameter("readerId");
@@ -58,10 +60,22 @@ public class HistoryServlet extends HttpServlet {
                 history.setTakeOnBook(new GregorianCalendar().getTime());
                 historyFacade.create(history);
                 request.setAttribute("info", "Книга выдана");
-                request.getRequestDispatcher("/index.jsp").forward(request, response);
+                request.getRequestDispatcher("/index").forward(request, response);
                 break;
             case "/listTakedBooks":
-                request.getRequestDispatcher("/WEB-INF/listTakedBooks.jsp").forward(request, response);
+                request.setAttribute("listTakedBooks", historyFacade.getListTakedBooks());
+                request.getRequestDispatcher("/WEB-INF/history/listTakedBooks.jsp").forward(request, response);
+                break;
+            case "/formReturnBook":
+                request.setAttribute("listTakedBooks", historyFacade.getListTakedBooks());
+                request.getRequestDispatcher("/WEB-INF/history/returnBook.jsp").forward(request, response);
+                break;
+            case "/returnBook":
+                String historyId = request.getParameter("historyId");
+                history = historyFacade.find(Long.parseLong(historyId));
+                history.setReturnBook(new GregorianCalendar().getTime());
+                historyFacade.edit(history);
+                request.getRequestDispatcher("/formReturnBook").forward(request, response);
                 break;
         }
     }

@@ -8,7 +8,6 @@ package servlets;
 
 import entity.Reader;
 import java.io.IOException;
-import java.io.PrintWriter;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -39,7 +38,7 @@ public class ReaderServlet extends HttpServlet {
         String path = request.getServletPath();
         switch (path) {
             case "/newReader":
-                request.getRequestDispatcher("/WEB-INF/createReader.jsp").forward(request, response);
+                request.getRequestDispatcher("/WEB-INF/reader/createReader.jsp").forward(request, response);
                 break;
             case "/createReader":
                 Reader reader = new Reader();
@@ -51,7 +50,7 @@ public class ReaderServlet extends HttpServlet {
                 break;
             case "/listReaders":
                 request.setAttribute("listReaders", readerFacade.findAll());
-                request.getRequestDispatcher("/WEB-INF/listReaders.jsp").forward(request, response);
+                request.getRequestDispatcher("/WEB-INF/reader/listReaders.jsp").forward(request, response);
                 break;
         }
     }
