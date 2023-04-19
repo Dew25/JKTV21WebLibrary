@@ -24,9 +24,11 @@ import tools.BirthdayConverter;
     "/newAuthor",
     "/createAuthor",
     "/listAuthors",
+    "/proba",
     
 })
 public class AuthorServlet extends HttpServlet {
+    
 
     @EJB private AuthorFacade authorFacade;
     
