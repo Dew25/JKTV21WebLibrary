@@ -1,25 +1,25 @@
-<%-- 
-    Document   : listReaders
-    Created on : Jan 30, 2023, 9:22:51 AM
-    Author     : Melnikov
---%>
-
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<!DOCTYPE html>
-<html>
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Список авторов</title>
-    </head>
-    <body>
-        <h1>Список авторов</h1>
-        <ol>
-            <c:forEach var="author" items="${listAuthors}">
-                <li>
-                    ${author.firstname} ${author.lastname}. ${author.strBirthday}
-                </li>
-            </c:forEach>
-        </ol>
-    </body>
-</html>
+
+        <h1 class="w-100 text-center my-5">Список авторов</h1>
+        <div class="row d-flex justify-content-center ">
+            <div class="card m-2 border-0" style="width: 40rem;">
+                <table class="table">
+                    <thead>
+                      <tr>
+                        <th class="col col-sm-1">№</th>
+                        <th class="col col-lg-8">Автор</th>
+                        <th class="col col-lg-3">Рождение</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                        <c:forEach var="author" items="${listAuthors}" varStatus="status">
+                            <tr>
+                              <th scope="row">${status.index+1}</th>
+                              <td>${author.firstname} ${author.lastname}</td>
+                              <td>${author.strBirthday}</td>
+                            </tr>
+                        </c:forEach>
+                    </tbody>
+                  </table>
+            </div>
+        </div>

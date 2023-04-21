@@ -43,15 +43,15 @@
             <li><a class="dropdown-item" href="listReaders">Список читателей</a></li>
           </ul>
         </li>
-        
         <li class="nav-item">
           <a class="nav-link active" aria-current="page" href="/about.jsp">О нас</a>
         </li>
       </ul>
-      <form class="d-flex">
-        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-        <button class="btn btn-outline-light" type="submit">Search</button>
-      </form>
+      <ul class="navbar-nav mb-2 mb-lg-0">
+        <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="#">Войти</a>
+        </li>
+      </ul>
     </div>
   </div>
 </nav>

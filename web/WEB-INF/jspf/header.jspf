@@ -10,4 +10,4 @@
     </head>
     <body>
     <jsp:include page="/WEB-INF/menu/navbar.jsp"></jsp:include>
-    <p>${info}</p>   
+    <p class="w-100 text-center">${info}</p>   
