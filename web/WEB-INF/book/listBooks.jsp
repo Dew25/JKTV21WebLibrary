@@ -4,7 +4,7 @@
 <h1 class="w-100 text-center my-5">Список книг</h1>
         <div class="row d-flex justify-content-center ">
             <c:forEach var="book" items="${listBooks}">
-                <div class="card m-2" style="width: 10rem;">
+                <div class="card m-2" style="width: 15rem;">
                     <img src="..." class="card-img-top" alt="...">
                     <div class="card-body">
                       <h5 class="card-title">${book.title}</h5>
@@ -15,7 +15,7 @@
                             </c:forEach>
                       
                       </p>
-                      <a href="#" class="btn btn-primary"></a>
+                      <a href="book?bookId=${book.id}" class="btn btn-primary">Посмотреть книгу</a>
                     </div>
                 </div>
             </c:forEach>

@@ -41,7 +41,6 @@ public class BookServlet extends HttpServlet {
         String path = request.getServletPath();
         switch (path) {
             case "/index":
-                request.setAttribute("listBooks", bookFacade.findAll());
                 request.getRequestDispatcher("/index.jsp").forward(request, response);
                 break;
             case "/newBook":

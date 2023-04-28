@@ -7,6 +7,7 @@
 package servlets;
 
 import entity.Reader;
+import entity.User;
 import java.io.IOException;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
@@ -14,7 +15,10 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import session.ReaderFacade;
+import session.UserFacade;
+import tools.EncryptPassword;
 
 /**
  *
@@ -29,6 +33,7 @@ import session.ReaderFacade;
 public class ReaderServlet extends HttpServlet {
 
     @EJB private ReaderFacade readerFacade;
+    @EJB private UserFacade userFacade;
     
    
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
@@ -41,14 +46,58 @@ public class ReaderServlet extends HttpServlet {
                 request.getRequestDispatcher("/WEB-INF/reader/createReader.jsp").forward(request, response);
                 break;
             case "/createReader":
+                String firstname = request.getParameter("firstname");
+                String lastname = request.getParameter("lastname");
+                String phone = request.getParameter("phone");
+                String login = request.getParameter("login");
+                String password = request.getParameter("password");
+                if(firstname == null || firstname.isEmpty() || lastname == null || lastname.isEmpty()
+                        || phone == null || phone.isEmpty() || login == null || login.isEmpty()
+                        || password == null || password.isEmpty()){
+                    request.setAttribute("info", "Не все поля заполнены");
+                    request.getRequestDispatcher("/newReader").forward(request, response);
+                    break;
+                }
                 Reader reader = new Reader();
-                reader.setFirstname(request.getParameter("firstname"));
-                reader.setLastname(request.getParameter("lastname"));
-                reader.setPhone(request.getParameter("phone"));
+                reader.setFirstname(firstname);
+                reader.setLastname(lastname);
+                reader.setPhone(phone);
                 readerFacade.create(reader);
-                request.getRequestDispatcher("/listReaders").forward(request, response);
+                User user = new User();
+                user.setLogin(login);
+                EncryptPassword ep = new EncryptPassword();
+                user.setSalt(ep.getSalt());
+                user.setPassword(ep.getProtectedPassword(password, user.getSalt()));
+                user.setReader(reader);
+                user.getRoles().add(LoginServlet.Roles.USER.toString());
+                try {
+                    userFacade.create(user);
+                } catch (Exception e) {
+                    request.setAttribute("info", "Такой пользователь уже существует");
+                    request.getRequestDispatcher("/newReader").forward(request, response);
+                    break;
+                }
+                request.setAttribute("info", "Читатель зарегистрирован");
+                request.getRequestDispatcher("/index").forward(request, response);
                 break;
             case "/listReaders":
+                HttpSession session = request.getSession(false);
+                if(session == null){
+                    request.setAttribute("info", "У вас нет прав. Авторизуйтесь");
+                    request.getRequestDispatcher("/loginForm.jsp").forward(request, response);
+                    break;
+                }
+                User authUser = (User) session.getAttribute("authUser");
+                if(authUser == null){
+                    request.setAttribute("info", "У вас нет прав. Авторизуйтесь");
+                    request.getRequestDispatcher("/loginForm.jsp").forward(request, response);
+                    break;
+                }
+                if(!authUser.getRoles().contains(LoginServlet.Roles.ADMINISTRATOR.toString())){
+                    request.setAttribute("info", "У вас нет прав. Авторизуйтесь");
+                    request.getRequestDispatcher("/loginForm.jsp").forward(request, response);
+                    break;
+                }
                 request.setAttribute("listReaders", readerFacade.findAll());
                 request.getRequestDispatcher("/WEB-INF/reader/listReaders.jsp").forward(request, response);
                 break;

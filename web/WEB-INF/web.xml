@@ -5,10 +5,15 @@
             30
         </session-timeout>
     </session-config>
+    <welcome-file-list>
+        <welcome-file>index</welcome-file>
+    </welcome-file-list>
     <jsp-config>
         <jsp-property-group>
             <display-name>template1</display-name>
             <url-pattern>/index.jsp</url-pattern>
+            <url-pattern>/loginForm.jsp</url-pattern>
+            <url-pattern>/about.jsp</url-pattern>
             <url-pattern>/WEB-INF/history/*</url-pattern>
             <url-pattern>/WEB-INF/book/*</url-pattern>
             <url-pattern>/WEB-INF/reader/*</url-pattern>

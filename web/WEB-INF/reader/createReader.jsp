@@ -23,6 +23,18 @@
                         </div>
                     </div>
                     <div class="mb-3 row">
+                        <label for="inputLogin" class="col-sm-3 col-form-label">Логин: </label>
+                        <div class="col-sm-9">
+                          <input type="text" class="w-100" id="inputLogin" name="login" value="">
+                        </div>
+                    </div>
+                    <div class="mb-3 row">
+                        <label for="inputPassword" class="col-sm-3 col-form-label">Пароль: </label>
+                        <div class="col-sm-9">
+                          <input type="text" class="w-100" id="inputPassword" name="password" value="">
+                        </div>
+                    </div>
+                    <div class="mb-3 row">
                         <div class="col-sm-12 d-flex justify-content-end">
                             <input class="btn btn-primary" type="submit" value="Добавить">
                         </div>

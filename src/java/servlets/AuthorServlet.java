@@ -24,14 +24,12 @@ import tools.BirthdayConverter;
     "/newAuthor",
     "/createAuthor",
     "/listAuthors",
-    "/proba",
+   
     
 })
 public class AuthorServlet extends HttpServlet {
-    
 
     @EJB private AuthorFacade authorFacade;
-    
     
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {

@@ -44,12 +44,15 @@
           </ul>
         </li>
         <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="/about.jsp">О нас</a>
+          <a class="nav-link" aria-current="page" href="about.jsp">О нас</a>
         </li>
       </ul>
       <ul class="navbar-nav mb-2 mb-lg-0">
         <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="#">Войти</a>
+            <a class="nav-link active" aria-current="page" href="loginForm">Войти</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="logout">Выйти</a>
         </li>
       </ul>
     </div>
