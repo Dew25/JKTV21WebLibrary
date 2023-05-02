@@ -5,7 +5,6 @@
  */
 package servlets;
 
-import entity.Author;
 import entity.Reader;
 import entity.User;
 import java.io.IOException;
@@ -17,9 +16,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import session.AuthorFacade;
+import session.BookFacade;
 import session.ReaderFacade;
 import session.UserFacade;
-import tools.BirthdayConverter;
 import tools.EncryptPassword;
 
 /**
@@ -27,10 +26,14 @@ import tools.EncryptPassword;
  * @author Melnikov
  */
 @WebServlet(name = "LoginServlet", loadOnStartup = 1, urlPatterns = {
-    
+    "/index",
     "/loginForm",
     "/login",
-    "/logout",
+    
+    "/listBooks",
+     "/listAuthors",
+     "/newReader", 
+    "/createReader",
    
     
 })
@@ -38,6 +41,8 @@ public class LoginServlet extends HttpServlet {
 
     @EJB private UserFacade userFacade;
     @EJB private ReaderFacade readerFacade;
+    @EJB private BookFacade bookFacade;
+    @EJB private AuthorFacade authorFacade;
     
     static enum Roles {ADMINISTRATOR,MANAGER,USER};
 
@@ -68,7 +73,9 @@ public class LoginServlet extends HttpServlet {
         request.setCharacterEncoding("UTF-8");
         String path = request.getServletPath();
         switch (path) {
-            
+            case "/index":
+                request.getRequestDispatcher("/index.jsp").forward(request, response);
+                break;
             case "/loginForm":
                 request.getRequestDispatcher("/loginForm.jsp").forward(request, response);
                 break;
@@ -93,15 +100,53 @@ public class LoginServlet extends HttpServlet {
                 request.setAttribute("info", "Привет, "+user.getLogin()+"!");
                 request.getRequestDispatcher("/index").forward(request, response);
                 break;
-            case "/logout":
-                session = request.getSession(false);
-                if(session != null){
-                    session.invalidate();
-                    request.setAttribute("info", "Вы вышли");
-                }
-                request.getRequestDispatcher("/index").forward(request, response);
-                break;
             
+            case "/listBooks":
+                request.setAttribute("listBooks", bookFacade.findAll());
+                request.getRequestDispatcher("/WEB-INF/book/listBooks.jsp").forward(request, response);
+                break;    
+            case "/listAuthors":
+                request.setAttribute("listAuthors", authorFacade.findAll());
+                request.getRequestDispatcher("/WEB-INF/author/listAuthors.jsp").forward(request, response);
+                break;
+            case "/newReader":
+                request.getRequestDispatcher("/WEB-INF/reader/createReader.jsp").forward(request, response);
+                break;
+            case "/createReader":
+                String firstname = request.getParameter("firstname");
+                String lastname = request.getParameter("lastname");
+                String phone = request.getParameter("phone");
+                login = request.getParameter("login");
+                password = request.getParameter("password");
+                if(firstname == null || firstname.isEmpty() || lastname == null || lastname.isEmpty()
+                        || phone == null || phone.isEmpty() || login == null || login.isEmpty()
+                        || password == null || password.isEmpty()){
+                    request.setAttribute("info", "Не все поля заполнены");
+                    request.getRequestDispatcher("/newReader").forward(request, response);
+                    break;
+                }
+                Reader reader = new Reader();
+                reader.setFirstname(firstname);
+                reader.setLastname(lastname);
+                reader.setPhone(phone);
+                readerFacade.create(reader);
+                user = new User();
+                user.setLogin(login);
+                ep = new EncryptPassword();
+                user.setSalt(ep.getSalt());
+                user.setPassword(ep.getProtectedPassword(password, user.getSalt()));
+                user.setReader(reader);
+                user.getRoles().add(LoginServlet.Roles.USER.toString());
+                try {
+                    userFacade.create(user);
+                } catch (Exception e) {
+                    request.setAttribute("info", "Такой пользователь уже существует");
+                    request.getRequestDispatcher("/newReader").forward(request, response);
+                    break;
+                }
+                request.setAttribute("info", "Читатель зарегистрирован");
+                request.getRequestDispatcher("/index").forward(request, response);
+                break;    
         }
     }
 

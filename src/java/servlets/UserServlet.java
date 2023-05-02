@@ -8,6 +8,7 @@ package servlets;
 import entity.Book;
 import entity.History;
 import entity.Reader;
+import entity.User;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.GregorianCalendar;
@@ -18,6 +19,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import session.BookFacade;
 import session.HistoryFacade;
 import session.ReaderFacade;
@@ -26,14 +28,14 @@ import session.ReaderFacade;
  *
  * @author Melnikov
  */
-@WebServlet(name = "HistoryServlet", urlPatterns = {
+@WebServlet(name = "UserServlet", urlPatterns = {
     "/takeOnBook",
     "/createHistory",
-    "/listTakedBooks",
     "/formReturnBook",
     "/returnBook",
+    "/logout",
 })
-public class HistoryServlet extends HttpServlet {
+public class UserServlet extends HttpServlet {
     @EJB private BookFacade bookFacade;
     @EJB private ReaderFacade readerFacade;
     @EJB private HistoryFacade historyFacade;
@@ -42,6 +44,23 @@ public class HistoryServlet extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         request.setCharacterEncoding("UTF-8");
+        HttpSession session = request.getSession(false);
+        if(session == null){
+            request.setAttribute("info", "У вас нет прав. Авторизуйтесь");
+            request.getRequestDispatcher("/loginForm.jsp").forward(request, response);
+            return;
+        }
+        User authUser = (User) session.getAttribute("authUser");
+        if(authUser == null){
+            request.setAttribute("info", "У вас нет прав. Авторизуйтесь");
+            request.getRequestDispatcher("/loginForm.jsp").forward(request, response);
+            return;
+        }
+        if(!authUser.getRoles().contains(LoginServlet.Roles.USER.toString())){
+            request.setAttribute("info", "У вас нет прав. Авторизуйтесь");
+            request.getRequestDispatcher("/loginForm.jsp").forward(request, response);
+            return;
+        }
         String path = request.getServletPath();
         switch (path) {
             case "/takeOnBook":
@@ -62,10 +81,7 @@ public class HistoryServlet extends HttpServlet {
                 request.setAttribute("info", "Книга выдана");
                 request.getRequestDispatcher("/index").forward(request, response);
                 break;
-            case "/listTakedBooks":
-                request.setAttribute("listTakedBooks", historyFacade.getListTakedBooks());
-                request.getRequestDispatcher("/WEB-INF/history/listTakedBooks.jsp").forward(request, response);
-                break;
+           
             case "/formReturnBook":
                 request.setAttribute("listTakedBooks", historyFacade.getListTakedBooks());
                 request.getRequestDispatcher("/WEB-INF/history/returnBook.jsp").forward(request, response);
@@ -77,6 +93,14 @@ public class HistoryServlet extends HttpServlet {
                 historyFacade.edit(history);
                 request.getRequestDispatcher("/formReturnBook").forward(request, response);
                 break;
+            case "/logout":
+                session = request.getSession(false);
+                if(session != null){
+                    session.invalidate();
+                    request.setAttribute("info", "Вы вышли");
+                }
+                response.sendRedirect(request.getContextPath()+"/index");
+                break;    
         }
     }
 
