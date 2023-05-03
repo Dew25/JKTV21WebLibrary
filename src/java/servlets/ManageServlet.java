@@ -21,6 +21,7 @@ import javax.servlet.http.HttpSession;
 import session.AuthorFacade;
 import session.BookFacade;
 import session.HistoryFacade;
+import tools.PropertyLoader;
 
 /**
  *
@@ -46,18 +47,18 @@ public class ManageServlet extends HttpServlet {
         HttpSession session = request.getSession(false);
         if(session == null){
             request.setAttribute("info", "У вас нет прав. Авторизуйтесь");
-            request.getRequestDispatcher("/loginForm.jsp").forward(request, response);
+            request.getRequestDispatcher(PropertyLoader.getPath("loginForm")).forward(request, response);
             return;
         }
         User authUser = (User) session.getAttribute("authUser");
         if(authUser == null){
             request.setAttribute("info", "У вас нет прав. Авторизуйтесь");
-            request.getRequestDispatcher("/loginForm.jsp").forward(request, response);
+            request.getRequestDispatcher(PropertyLoader.getPath("loginForm")).forward(request, response);
             return;
         }
         if(!authUser.getRoles().contains(LoginServlet.Roles.MANAGER.toString())){
             request.setAttribute("info", "У вас нет прав. Авторизуйтесь");
-            request.getRequestDispatcher("/loginForm.jsp").forward(request, response);
+            request.getRequestDispatcher(PropertyLoader.getPath("loginForm")).forward(request, response);
             return;
         }
         String path = request.getServletPath();
@@ -65,7 +66,7 @@ public class ManageServlet extends HttpServlet {
             
             case "/newBook":
                 request.setAttribute("listAuthors",authorFacade.findAll());
-                request.getRequestDispatcher("/WEB-INF/book/createBook.jsp").forward(request, response);
+                request.getRequestDispatcher(PropertyLoader.getPath("createBook")).forward(request, response);
                 break;
             case "/createBook":
                  String title = request.getParameter("title");
@@ -84,11 +85,11 @@ public class ManageServlet extends HttpServlet {
                     authorFacade.edit(a);
                 }
                 request.setAttribute("listBooks", bookFacade.findAll());
-                request.getRequestDispatcher("/WEB-INF/book/listBooks.jsp").forward(request, response);
+                request.getRequestDispatcher(PropertyLoader.getPath("listBooks")).forward(request, response);
                 break;
             case "/listTakedBooks":
                 request.setAttribute("listTakedBooks", historyFacade.getListTakedBooks());
-                request.getRequestDispatcher("/WEB-INF/history/listTakedBooks.jsp").forward(request, response);
+                request.getRequestDispatcher(PropertyLoader.getPath("listTakedBooks")).forward(request, response);
                 break;     
             
             

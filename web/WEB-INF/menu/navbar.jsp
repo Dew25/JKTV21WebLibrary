@@ -62,8 +62,18 @@
             </c:if>
           </ul>
         </li>
+        <c:if test="${ADMINISTRATOR}">
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                Администратор
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a class="dropdown-item" href="changeRole">Изменить роль</a></li>
+              </ul>
+            </li>
+        </c:if>
         <li class="nav-item">
-          <a class="nav-link" aria-current="page" href="about.jsp">О нас</a>
+          <a class="nav-link" aria-current="page" href="about">О нас</a>
         </li>
       </ul>
       <c:if test="${USER}">

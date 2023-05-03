@@ -17,6 +17,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import session.AuthorFacade;
 import tools.BirthdayConverter;
+import tools.PropertyLoader;
 
 /**
  *
@@ -40,24 +41,24 @@ public class AuthorServlet extends HttpServlet {
         HttpSession session = request.getSession(false);
         if(session == null){
             request.setAttribute("info", "У вас нет прав. Авторизуйтесь");
-            request.getRequestDispatcher("/loginForm.jsp").forward(request, response);
+            request.getRequestDispatcher(PropertyLoader.getPath("loginForm")).forward(request, response);
             return;
         }
         User authUser = (User) session.getAttribute("authUser");
         if(authUser == null){
             request.setAttribute("info", "У вас нет прав. Авторизуйтесь");
-            request.getRequestDispatcher("/loginForm.jsp").forward(request, response);
+            request.getRequestDispatcher(PropertyLoader.getPath("loginForm")).forward(request, response);
             return;
         }
         if(!authUser.getRoles().contains(LoginServlet.Roles.MANAGER.toString())){
             request.setAttribute("info", "У вас нет прав. Авторизуйтесь");
-            request.getRequestDispatcher("/loginForm.jsp").forward(request, response);
+            request.getRequestDispatcher(PropertyLoader.getPath("loginForm")).forward(request, response);
             return;
         }
         String path = request.getServletPath();
         switch (path) {
             case "/newAuthor":
-                request.getRequestDispatcher("/WEB-INF/author/createAuthor.jsp").forward(request, response);
+                request.getRequestDispatcher(PropertyLoader.getPath("createAuthor")).forward(request, response);
                 break;
             case "/createAuthor":
                 String firstname = request.getParameter("firstname");
@@ -75,7 +76,7 @@ public class AuthorServlet extends HttpServlet {
                                     ));
                 authorFacade.create(author);
                 request.setAttribute("info", "Автор добавлен");
-                request.getRequestDispatcher("/index").forward(request, response);
+                request.getRequestDispatcher(PropertyLoader.getPath("index")).forward(request, response);
                 break;
             
             

@@ -20,16 +20,17 @@ import session.BookFacade;
 import session.ReaderFacade;
 import session.UserFacade;
 import tools.EncryptPassword;
+import tools.PropertyLoader;
 
 /**
  *
  * @author Melnikov
  */
 @WebServlet(name = "LoginServlet", loadOnStartup = 1, urlPatterns = {
+    "/about",
     "/index",
     "/loginForm",
     "/login",
-    
     "/listBooks",
      "/listAuthors",
      "/newReader", 
@@ -73,11 +74,14 @@ public class LoginServlet extends HttpServlet {
         request.setCharacterEncoding("UTF-8");
         String path = request.getServletPath();
         switch (path) {
+            case "/about":
+                request.getRequestDispatcher(PropertyLoader.getPath("about")).forward(request, response);
+                break;
             case "/index":
                 request.getRequestDispatcher("/index.jsp").forward(request, response);
                 break;
             case "/loginForm":
-                request.getRequestDispatcher("/loginForm.jsp").forward(request, response);
+                request.getRequestDispatcher(PropertyLoader.getPath("loginForm")).forward(request, response);
                 break;
             case "/login":
                 String login = request.getParameter("login");
@@ -85,32 +89,32 @@ public class LoginServlet extends HttpServlet {
                 User user = userFacade.findByLogin(login);
                 if(user == null){
                     request.setAttribute("info", "Нет такого пользователя или неправильный пароль.");
-                    request.getRequestDispatcher("/loginForm").forward(request, response);
+                    request.getRequestDispatcher(PropertyLoader.getPath("loginForm")).forward(request, response);
                     break;
                 }
                 EncryptPassword ep = new EncryptPassword();
                 password = ep.getProtectedPassword(password, user.getSalt());
                 if(!password.equals(user.getPassword())){
                     request.setAttribute("info", "Нет такого пользователя или неправильный пароль.");
-                    request.getRequestDispatcher("/loginForm").forward(request, response);
+                    request.getRequestDispatcher(PropertyLoader.getPath("loginForm")).forward(request, response);
                     break;
                 }
                 HttpSession session = request.getSession(true);
                 session.setAttribute("authUser", user);
                 request.setAttribute("info", "Привет, "+user.getLogin()+"!");
-                request.getRequestDispatcher("/index").forward(request, response);
+                request.getRequestDispatcher(PropertyLoader.getPath("index")).forward(request, response);
                 break;
             
             case "/listBooks":
                 request.setAttribute("listBooks", bookFacade.findAll());
-                request.getRequestDispatcher("/WEB-INF/book/listBooks.jsp").forward(request, response);
+                request.getRequestDispatcher(PropertyLoader.getPath("listBooks")).forward(request, response);
                 break;    
             case "/listAuthors":
                 request.setAttribute("listAuthors", authorFacade.findAll());
-                request.getRequestDispatcher("/WEB-INF/author/listAuthors.jsp").forward(request, response);
+                request.getRequestDispatcher(PropertyLoader.getPath("listAuthors")).forward(request, response);
                 break;
             case "/newReader":
-                request.getRequestDispatcher("/WEB-INF/reader/createReader.jsp").forward(request, response);
+                request.getRequestDispatcher(PropertyLoader.getPath("createReader")).forward(request, response);
                 break;
             case "/createReader":
                 String firstname = request.getParameter("firstname");
@@ -145,7 +149,7 @@ public class LoginServlet extends HttpServlet {
                     break;
                 }
                 request.setAttribute("info", "Читатель зарегистрирован");
-                request.getRequestDispatcher("/index").forward(request, response);
+                request.getRequestDispatcher(PropertyLoader.getPath("index")).forward(request, response);
                 break;    
         }
     }
