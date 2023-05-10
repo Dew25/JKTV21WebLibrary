@@ -80,9 +80,8 @@ public class Book implements Serializable{
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 47 * hash + Objects.hashCode(this.id);
-        hash = 47 * hash + Objects.hashCode(this.title);
-        hash = 47 * hash + Objects.hashCode(this.authors);
+        hash = 29 * hash + Objects.hashCode(this.id);
+        hash = 29 * hash + Objects.hashCode(this.title);
         return hash;
     }
 
@@ -104,11 +103,10 @@ public class Book implements Serializable{
         if (!Objects.equals(this.id, other.id)) {
             return false;
         }
-        if (!Objects.equals(this.authors, other.authors)) {
-            return false;
-        }
         return true;
     }
+
+    
 
     
     

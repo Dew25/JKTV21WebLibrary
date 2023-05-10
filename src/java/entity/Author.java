@@ -32,13 +32,12 @@ public class Author implements Serializable{
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date birthday;
     @OneToMany
-    private List<Book> books;
+    private List<Book> books = new ArrayList<>();
     @Transient
     private String strBirthday;
     
 
     public Author() {
-        books = new ArrayList<>();
         
     }
 
@@ -152,9 +151,7 @@ public class Author implements Serializable{
         if (!Objects.equals(this.birthday, other.birthday)) {
             return false;
         }
-        if (!Objects.equals(this.books, other.books)) {
-            return false;
-        }
+       
         return true;
     }
                    

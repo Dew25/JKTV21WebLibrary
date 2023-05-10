@@ -96,12 +96,12 @@ public class History implements Serializable{
 
     @Override
     public int hashCode() {
-        int hash = 7;
-        hash = 79 * hash + Objects.hashCode(this.id);
-        hash = 79 * hash + Objects.hashCode(this.reader);
-        hash = 79 * hash + Objects.hashCode(this.book);
-        hash = 79 * hash + Objects.hashCode(this.takeOnBook);
-        hash = 79 * hash + Objects.hashCode(this.returnBook);
+        int hash = 5;
+        hash = 37 * hash + Objects.hashCode(this.id);
+        hash = 37 * hash + Objects.hashCode(this.reader);
+        hash = 37 * hash + Objects.hashCode(this.book);
+        hash = 37 * hash + Objects.hashCode(this.takeOnBook);
+        hash = 37 * hash + Objects.hashCode(this.returnBook);
         return hash;
     }
 
@@ -135,5 +135,6 @@ public class History implements Serializable{
         return true;
     }
 
+  
     
 }

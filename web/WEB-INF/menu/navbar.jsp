@@ -69,6 +69,7 @@
               </a>
               <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                 <li><a class="dropdown-item" href="changeRole">Изменить роль</a></li>
+                <li><a class="dropdown-item" href="statisticForm">Статистика</a></li>
               </ul>
             </li>
         </c:if>
