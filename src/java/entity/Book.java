@@ -28,6 +28,7 @@ public class Book implements Serializable{
     private String title;
     @OneToMany
     private List<Author> authors; 
+    private Cover cover;
 
     public Book() {
         authors = new ArrayList<>();
@@ -104,6 +105,14 @@ public class Book implements Serializable{
             return false;
         }
         return true;
+    }
+
+    public Cover getCover() {
+        return cover;
+    }
+
+    public void setCover(Cover cover) {
+        this.cover = cover;
     }
 
     
